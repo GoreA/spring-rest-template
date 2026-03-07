@@ -21,8 +21,8 @@ import tools.jackson.databind.JsonNode;
 public class BeerClientImpl implements BeerClient {
 
   private final RestTemplateBuilder restTemplateBuilder;
-  private static final String BEERS_URL = "/api/v1/beer";
-  private static final String BEER_BY_ID_URL = "/api/v1/beer/{id}";
+  public static final String BEERS_URL = "/api/v1/beer";
+  public static final String BEER_BY_ID_URL = "/api/v1/beer/{id}";
 
   @Override
   public Page<BeerDTO> listBeers() {
