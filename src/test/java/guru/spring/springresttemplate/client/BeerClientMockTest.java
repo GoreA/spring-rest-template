@@ -30,10 +30,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.queryParam;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestToUriTemplate;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withAccepted;
@@ -160,16 +158,9 @@ public class BeerClientMockTest {
   void testListBeersWthQueryParams() {
     String payload = objectMapper.writeValueAsString(getPage());
 
-    URI uri = UriComponentsBuilder.fromUriString(URL + BeerClientImpl.BEERS_URL)
-        .queryParam("beerName", "Mango Bobs")
-        .queryParam("beerStyle", "IPA")
-        .build()
-        .toUri();
-
     server.expect(method(HttpMethod.GET))
-        .andExpect(requestTo(uri))
-        .andExpect(queryParam("beerName", "Mango%20Bobs")) //TODO correct should be "Mango Bobs" but MockRestServiceServer does not decode query params
-        .andExpect(queryParam("beerStyle", "IPA"))
+        .andExpect(requestToUriTemplate(URL + BeerClientImpl.BEERS_URL +
+            "?beerName={beerName}&beerStyle={beerStyle}", "Mango Bobs", "IPA"))
         .andRespond(withSuccess(payload, MediaType.APPLICATION_JSON));
 
     Page<BeerDTO> dtos = beerClient.listBeers("Mango Bobs", BeerStyle.IPA, null, null, null);

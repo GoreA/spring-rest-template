@@ -44,7 +44,7 @@ public class BeerClientImpl implements BeerClient {
 
     if (beerStyle != null) {
       uriComponentsBuilder.queryParam("beerStyle", "{beerStyle}");
-      uriVars.put("beerStyle", beerStyle);
+      uriVars.put("beerStyle", beerStyle.name());
     }
 
     if (showInventory != null) {
